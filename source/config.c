@@ -77,7 +77,7 @@ void LoadConfig(u8 init)
 	if(Config.HardwareMode7Filter == -1)
 		Config.HardwareMode7Filter = 0;
 
-	if(init && strlen(tempDir) > 0 && tempDir[0] == '/')
+	if(init && strlen(tempDir) > 0)
 	{
 		DIR *pDir = opendir(tempDir);
 		if(pDir != NULL)
@@ -104,7 +104,7 @@ void SaveConfig(u8 saveCurDir)
 	FILE *pFile = fopen(configFilePath, "wb");
 	if(pFile == NULL)
 	{
-		bprintf("Error while saving config\n");
+		// bprintf("Error while saving config\n");
 		return;
 	}
 

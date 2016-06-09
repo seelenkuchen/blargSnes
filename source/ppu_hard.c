@@ -1672,7 +1672,7 @@ int PPU_HardRenderOBJ(u8* oam, u32 oamextra, int y, int height, int ystart, int 
 			}
 			
 			//if (x <= -8 || x > 255 || y <= -8 || y > 223)
-			//	bprintf("OBJ tile %d/%d %04X\n", x, y, coord);
+			//	// bprintf("OBJ tile %d/%d %04X\n", x, y, coord);
 			
 			switch (attrib & 0xC000)
 			{
@@ -1718,7 +1718,7 @@ int PPU_HardRenderOBJ(u8* oam, u32 oamextra, int y, int height, int ystart, int 
 
 void PPU_HardRenderOBJs()
 {
-	//bprintf("VBL - %d\n", PPU.FirstOBJ);
+	//// bprintf("VBL - %d\n", PPU.FirstOBJ);
 	int i = PPU.FirstOBJ, j;
 	i--;
 	if (i < 0) i = 127;
@@ -2503,7 +2503,7 @@ void PPU_HardRender(u32 snum)
 		
 		/*if (PPU.NumPaletteChanges[ystart])
 		{
-			bprintf("[%03d] %d changes\n", ystart, PPU.NumPaletteChanges[ystart]);
+			// bprintf("[%03d] %d changes\n", ystart, PPU.NumPaletteChanges[ystart]);
 			PPU_ApplyPaletteChanges(PPU.NumPaletteChanges[ystart], PPU.PaletteChanges[ystart]);
 		}*/
 

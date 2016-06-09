@@ -52,7 +52,7 @@ void ROM_ApplySpeedHacks(int banknum, u8* bank)
 			bank[i+2] = 0x42;
 			bank[i+3] = (bank[i+3] & 0x0F) | (branchtype & 0xF0);
 			
-			bprintf("Speed hack installed @ %02X:%04X\n", banknum, (SNES_HiROM?0:0x8000)+i);
+			// bprintf("Speed hack installed @ %02X:%04X\n", banknum, (SNES_HiROM?0:0x8000)+i);
 			
 			i += 4;
 		}
@@ -67,7 +67,7 @@ void ROM_ApplySpeedHacks(int banknum, u8* bank)
 				bank[i+3] = 0x42;
 				bank[i+4] = (bank[i+4] & 0x0F) | (branchtype & 0xF0);
 				
-				bprintf("Speed hack installed @ %02X:%04X\n", banknum, (SNES_HiROM?0:0x8000)+i);
+				// bprintf("Speed hack installed @ %02X:%04X\n", banknum, (SNES_HiROM?0:0x8000)+i);
 			}
 			
 			i += 5;
@@ -234,7 +234,7 @@ bool ROM_LoadFile(char* name)
 	FILE *pFile = fopen(name, "rb");
 	if(pFile == NULL)
 	{
-		bprintf("Error while opening file\n");
+		// bprintf("Error while opening file\n");
 		return false;
 	}
 
@@ -243,7 +243,7 @@ bool ROM_LoadFile(char* name)
 	if((size < 16) || (size >= 0x100000000ULL))
 	{
 		fclose(pFile);
-		bprintf("File size bad: size=%lld\n", size);
+		// bprintf("File size bad: size=%lld\n", size);
 		return false;
 	}
 	ROM_FileSize = size;
@@ -271,7 +271,7 @@ bool ROM_LoadFile(char* name)
 		
 	if (bestone == 0 && score[0] < 0)
 	{
-		bprintf("Invalid ROM\n");
+		// bprintf("Invalid ROM\n");
 		return false;
 	}
 		
@@ -279,7 +279,7 @@ bool ROM_LoadFile(char* name)
 	SNES_HiROM = (bestone & 2) ? true : false;
 	ROM_HeaderOffset = SNES_HiROM ? 0xFFC0 : 0x7FC0;
 	
-	bprintf("ROM type: %s %s\n", (bestone & 1) ? "headered":"headerless", SNES_HiROM ? "HiROM":"LoROM");
+	// bprintf("ROM type: %s %s\n", (bestone & 1) ? "headered":"headerless", SNES_HiROM ? "HiROM":"LoROM");
 	
 	size -= ROM_BaseOffset;
 	
@@ -287,7 +287,7 @@ bool ROM_LoadFile(char* name)
 	ROM_NumBanks = 1;
 	while (ROM_NumBanks < nbanks) ROM_NumBanks <<= 1;
 	
-	bprintf("ROM size: %dKB / %d banks\n", ((u32)size) >> 10, ROM_NumBanks);
+	// bprintf("ROM size: %dKB / %d banks\n", ((u32)size) >> 10, ROM_NumBanks);
 	
 	if (ROM_Buffer)
 	{
@@ -300,7 +300,7 @@ bool ROM_LoadFile(char* name)
 	if (!ROM_Buffer)
 	{
 		fclose(pFile);
-		bprintf("Error while allocating ROM buffer\n");
+		// bprintf("Error while allocating ROM buffer\n");
 		return false;
 	}
 	
@@ -326,7 +326,7 @@ void ROM_SpeedChanged()
 	
 	if (SNES_FastROM)
 	{
-		bprintf("Fast ROM\n");
+		// bprintf("Fast ROM\n");
 		
 		for (b = 0x80; b < 0xC0; b++)
 			for (a = 0x8000; a < 0x10000; a += 0x2000)
@@ -338,7 +338,7 @@ void ROM_SpeedChanged()
 	}
 	else
 	{
-		bprintf("Slow ROM\n");
+		// bprintf("Slow ROM\n");
 		
 		for (b = 0x80; b < 0xC0; b++)
 			for (a = 0x8000; a < 0x10000; a += 0x2000)

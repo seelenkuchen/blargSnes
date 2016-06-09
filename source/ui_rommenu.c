@@ -284,12 +284,12 @@ void ROMMenu_Init()
 	
 	head = NULL;
 	curr = NULL;
-
+/*
 	if(strcmp(Config.DirPath,"/") == 0)
 	{
 		nfiles = 0;
 	}
-	else
+	else */
 	{
 		struct LISTITEM * newItem= (struct LISTITEM *)linearAlloc(sizeof(struct LISTITEM));
 		newItem->name = (char*)linearAlloc(0x106);
@@ -391,7 +391,7 @@ void ROMMenu_ExamineExec()
 	if(!fileIdx[menusel]->type)
 	{
 		if (!StartROM(fileIdx[menusel]->name, Config.DirPath))
-			bprintf("Failed to load this ROM\nPress A to return to menu\n");
+			// bprintf("Failed to load this ROM\nPress A to return to menu\n");
 
 		UI_Switch(&UI_Console);
 	}

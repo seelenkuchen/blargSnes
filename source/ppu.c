@@ -488,7 +488,7 @@ u8 PPU_Read8(u32 addr)
 				ret = SPC_IOPorts[4 + (addr&0x03)];
 			}
 			else
-				bprintf("Open bus 21%02X\n", addr); 
+				// bprintf("Open bus 21%02X\n", addr); 
 			break;
 	}
 
@@ -882,8 +882,8 @@ void PPU_Write8(u32 addr, u8 val)
 				PPU.M7ExtBG = val & 0x40;
 				PPU.OBJVDir = val & 0x02;
 				PPU.Interlace = val & 0x1;
-				if (val & 0x80) bprintf("!! PPU EXT SYNC\n");
-				if (val & 0x08) bprintf("!! PSEUDO HIRES\n");
+				// if (val & 0x80) // bprintf("!! PPU EXT SYNC\n");
+				// if (val & 0x08) // bprintf("!! PSEUDO HIRES\n");
 			}
 			break;
 			
@@ -937,7 +937,7 @@ void PPU_Write16(u32 addr, u16 val)
 		case 0x42: SPC_Compensate(); *(u16*)&SPC_IOPorts[2] = val; break;
 		
 		case 0x3F:
-		case 0x43: bprintf("!! write $21%02X %04X\n", addr, val); break;
+		case 0x43: // bprintf("!! write $21%02X %04X\n", addr, val); break;
 		
 		case 0x81: Mem_WRAMAddr = (Mem_WRAMAddr & 0x00010000) | val; break;
 		
@@ -1116,12 +1116,12 @@ void PPU_ComputerDoubleWindow(PPU_WindowSegment* s)
 void PPU_ComputeWindows(PPU_WindowSegment* s)
 {
 	PPU_WindowSegment* first_s = s;
-	//bprintf("-0- (%d,%d), -1- (%d,%d)\n", PPU.WinX[0], PPU.WinX[1], PPU.WinX[2], PPU.WinX[3]);
+	//// bprintf("-0- (%d,%d), -1- (%d,%d)\n", PPU.WinX[0], PPU.WinX[1], PPU.WinX[2], PPU.WinX[3]);
 	// check for cases that would disable windows fully
 	if ((!((PPU.MainScreen|PPU.SubScreen) & 0x1F00)) && 
 		(((PPU.ColorMath1 & 0x30) == 0x00) || ((PPU.ColorMath1 & 0x30) == 0x30)))
 	{
-		//bprintf("Disabled\n");
+		//// bprintf("Disabled\n");
 		s->EndOffset = 256;
 		s->WindowMask = 0x0F;
 		s->ColorMath = 0x10;

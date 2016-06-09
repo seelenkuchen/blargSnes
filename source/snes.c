@@ -127,13 +127,36 @@ bool SNES_LoadROM(char* path)
 	
 	SNES_SRAMMask = sramsize ? ((1024 << sramsize) - 1) : 0;
 	SNES_SRAMMask &= 0x000FFFFF;
-	bprintf("SRAM size: %dKB\n", (SNES_SRAMMask+1) >> 10);
+	// bprintf("SRAM size: %dKB\n", (SNES_SRAMMask+1) >> 10);
 	
 	if (SNES_SRAMMask)
 	{
-		strncpy(SNES_SRAMPath, path, strlen(path)-3);
-		strncpy(SNES_SRAMPath + strlen(path)-3, "srm", 3);
-		SNES_SRAMPath[strlen(path)] = '\0';
+        int useid = 0;
+        char fPath[] = "romfs:/rom.txt";
+        FILE *sFile = fopen(fPath, "r");
+        if(sFile == NULL)
+            useid = 1;
+
+        char tempbuf[256];
+        char sPath[] = "/snes/";
+        char sExt[] = ".srm";
+
+        if (useid)
+        {
+            u64 ID;
+            aptOpenSession();
+            APT_GetProgramID(&ID);
+            aptCloseSession();
+            sprintf(tempbuf, "%lx", ID);
+        }
+        else
+            fgets(tempbuf, sizeof(tempbuf), sFile);
+
+        strncpy(SNES_SRAMPath, sPath, 6);
+        strncpy(SNES_SRAMPath + 6, tempbuf, strlen(tempbuf));
+        strncpy(SNES_SRAMPath + strlen(tempbuf) + 4, sExt, 4);
+
+        fclose(sFile);
 
 		FILE *pFile = fopen(SNES_SRAMPath, "rb+");
 		if(pFile == NULL)
@@ -294,7 +317,7 @@ void SNES_SaveSRAM()
 	{
 		fwrite(SNES_SRAM, sizeof(char), SNES_SRAMMask + 1, pFile);
 		fclose(pFile);
-		bprintf("SRAM saved\n");
+		// bprintf("SRAM saved\n");
 	}
 	else
 		bprintf("SRAM save failed\n");
@@ -371,7 +394,7 @@ u8 SNES_GIORead8(u32 addr)
 			if (SNES_Status->HVBFlags & 0x20)
 			{
 				ret = 0x80;
-				SNES_Status->HVBFlags &= 0xDF;//bprintf("read 4210: %02X %02X %d %06X\n", ret, SNES_Status->HVBFlags, SNES_Status->VCount, debugpc);
+				SNES_Status->HVBFlags &= 0xDF;//// bprintf("read 4210: %02X %02X %d %06X\n", ret, SNES_Status->HVBFlags, SNES_Status->VCount, debugpc);
 			}
 			break;
 			

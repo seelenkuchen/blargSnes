@@ -358,7 +358,7 @@ void DspKeyOnChannel(u32 i) {
     channels[i].envCount = ENVCNT_START;
     channels[i].active = true;
 	
-	/*bprintf("%d -> %04X %04X\n", 
+	/* bprintf("%d -> %04X %04X\n", 
 		i, 
 		channels[i].blockPos, channels[i].sampleSpeed);*/
 
@@ -409,7 +409,7 @@ void DspWriteByte(u8 val, u8 address)
 
 	if(dsp[8191] >= 8191)
 	{
-		bprintf("!! DSP WRITEBUFFER OVERFLOW\n");
+		// bprintf("!! DSP WRITEBUFFER OVERFLOW\n");
 		return;
 	}
 

@@ -132,9 +132,9 @@ void reportStats()
 		reportFrame++;
 		if(reportFrame == 60)
 		{
-			bprintf("%d\n", vramSpaceFree());
-			bprintf("E: %.2f, P: %.2f, G: %.2f, FPS: %02d\n", ((double)(emuTime / 60) / 4468724.0) * 100, ((double)(ppuTime / 60) / 4468724.0) * 100, ((double)(gpuTime / gpuFPS) / 4468724.0) * 100, gpuFPS);
-			bprintf(" \n");
+		//	// bprintf("%d\n", vramSpaceFree());
+		//	// bprintf("E: %.2f, P: %.2f, G: %.2f, FPS: %02d\n", ((double)(emuTime / 60) / 4468724.0) * 100, ((double)(ppuTime / 60) / 4468724.0) * 100, ((double)(gpuTime / gpuFPS) / 4468724.0) * 100, gpuFPS);
+		//	// bprintf(" \n");
 			reportFrame = 0;
 			emuTime = 0;
 			ppuTime = 0;
@@ -204,7 +204,7 @@ void dbg_save(char* path, void* buf, int size)
 
 void debugcrapo(u32 op, u32 op2)
 {
-	bprintf("DBG: %08X %08X\n", op, op2);
+//	// bprintf("DBG: %08X %08X\n", op, op2);
 	DrawConsole();
 	//SwapBottomBuffers(0);
 	//ClearBottomBuffer();
@@ -215,7 +215,7 @@ void SPC_ReportUnk(u8 op, u32 pc)
 	static bool unkreported = false;
 	if (unkreported) return;
 	unkreported = true;
- 	bprintf("SPC UNK %02X @ %04X\n", op, pc);
+ //	// bprintf("SPC UNK %02X @ %04X\n", op, pc);
  }	
 
 void ReportCrash()
@@ -224,46 +224,46 @@ void ReportCrash()
 	running = 0;
 	
 	ClearConsole();
-	bprintf("Game has crashed (STOP)\n");
+//	// bprintf("Game has crashed (STOP)\n");
 	
 	extern u32 debugpc;
-	bprintf("PC: %02X:%04X (%06X)\n", CPU_Regs.PBR, CPU_Regs.PC, debugpc);
-	bprintf("P: %02X | M=%d X=%d E=%d\n", CPU_Regs.P.val&0xFF, CPU_Regs.P.M, CPU_Regs.P.X, CPU_Regs.P.E);
-	bprintf("A: %04X X: %04X Y: %04X\n", CPU_Regs.A, CPU_Regs.X, CPU_Regs.Y);
-	bprintf("S: %04X D: %02X DBR: %02X\n", CPU_Regs.S, CPU_Regs.D, CPU_Regs.DBR);
+	// // bprintf("PC: %02X:%04X (%06X)\n", CPU_Regs.PBR, CPU_Regs.PC, debugpc);
+	// // bprintf("P: %02X | M=%d X=%d E=%d\n", CPU_Regs.P.val&0xFF, CPU_Regs.P.M, CPU_Regs.P.X, CPU_Regs.P.E);
+	// // bprintf("A: %04X X: %04X Y: %04X\n", CPU_Regs.A, CPU_Regs.X, CPU_Regs.Y);
+	// // bprintf("S: %04X D: %02X DBR: %02X\n", CPU_Regs.S, CPU_Regs.D, CPU_Regs.DBR);
 	
-	bprintf("Stack\n");
-	bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
-		SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
-		SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
-		SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
-		SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
+	// // // bprintf("Stack\n");
+	// // // bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
+		// SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
+		// SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
+		// SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
+		// SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
 	CPU_Regs.S += 8;
-	bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
-		SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
-		SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
-		SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
-		SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
+	// // // bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
+		// SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
+		// SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
+		// SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
+		// SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
 	CPU_Regs.S += 8;
-	bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
-		SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
-		SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
-		SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
-		SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
+	// // // bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
+		// SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
+		// SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
+		// SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
+		// SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
 	CPU_Regs.S += 8;
-	bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
-		SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
-		SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
-		SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
-		SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
+	// // // bprintf("%02X %02X %02X %02X %02X %02X %02X %02X\n",
+		// SNES_SysRAM[CPU_Regs.S+0], SNES_SysRAM[CPU_Regs.S+1],
+		// SNES_SysRAM[CPU_Regs.S+2], SNES_SysRAM[CPU_Regs.S+3],
+		// SNES_SysRAM[CPU_Regs.S+4], SNES_SysRAM[CPU_Regs.S+5],
+		// SNES_SysRAM[CPU_Regs.S+6], SNES_SysRAM[CPU_Regs.S+7]);
 		
-	bprintf("Full RAM dump can be found on SD\n");
+	// // bprintf("Full RAM dump can be found on SD\n");
 	
 	u32 pc = (CPU_Regs.PBR<<16)|CPU_Regs.PC;
 	u32 ptr = Mem_PtrTable[pc >> 13];
-	bprintf("Ptr table entry: %08X\n", ptr);
+	// // bprintf("Ptr table entry: %08X\n", ptr);
 	
-	bprintf("Tell StapleButter\n");
+	// // bprintf("Tell StapleButter\n");
 	
 	dbg_save("/SNESRAM.bin", SNES_SysRAM, 0x20000);
 	dbg_save("/SNESPtrChunk.bin", (void*)(ptr&~0xF), 0x2000);
@@ -460,7 +460,7 @@ void RenderTopScreen()
 		RenderState = 1;
 				
 		/*SafeWait(gspEvents[GSPEVENT_P3D]);
-		{u64 darp = svcGetSystemTick() - baderp;bprintf("GPU: %f\n", (float)darp/268123.480);}
+		{u64 darp = svcGetSystemTick() - baderp;// bprintf("GPU: %f\n", (float)darp/268123.480);}
 		GX_DisplayTransfer(gpuOut, 0x019000F0, (u32*)gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 0x019000F0, 0x00001000);
 		RenderState = 2;*/
 	}
@@ -488,7 +488,7 @@ void ContinueRendering()
 				gpuTime += svcGetSystemTick() - gpuTick;
 				gpuFPS++;
 
-				//{u64 darp = svcGetSystemTick() - baderp;bprintf("GPU: %f\n", (float)darp/268123.480);}
+				//{u64 darp = svcGetSystemTick() - baderp;// bprintf("GPU: %f\n", (float)darp/268123.480);}
 				GX_DisplayTransfer(gpuOut, 0x019000F0, (u32*)gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 0x019000F0, 0x00001000);
 				RenderState = 2;
 			}
@@ -524,7 +524,7 @@ void FinishRendering()
 		gpuTime += svcGetSystemTick() - gpuTick;
 		gpuFPS++;
 
-		//{u64 darp = svcGetSystemTick() - baderp;bprintf("GPU: %f\n", (float)darp/268123.480);}
+		//{u64 darp = svcGetSystemTick() - baderp;// bprintf("GPU: %f\n", (float)darp/268123.480);}
 		GX_DisplayTransfer(gpuOut, 0x019000F0, (u32*)gfxGetFramebuffer(GFX_TOP, GFX_LEFT, NULL, NULL), 0x019000F0, 0x00001000);
 		RenderState = 2;
 	}
@@ -740,17 +740,17 @@ bool StartROM(char* path, char* dir)
 	framecount = 0;
 	
 	ClearConsole();
-	bprintf("blargSNES %s\n", BLARGSNES_VERSION);
-	bprintf("http://blargsnes.kuribo64.net/\n");
+//	// bprintf("blargSNES %s\n", BLARGSNES_VERSION);
+//	// bprintf("http://blargsnes.kuribo64.net/\n");
 
 	if(!AudioEnabled)
-		bprintf("NDSP cannot initialize\n");
+        bprintf("NDSP cannot initialize\n");
 	
 	// load the ROM
 	strcpy(temppath, dir);
 	strcpy(&temppath[strlen(dir)], path);
 	temppath[strlen(dir)+strlen(path)] = '\0';
-	bprintf("Loading %s...\n", path);
+//	// bprintf("Loading %s...\n", path);
 	
 
 
@@ -773,10 +773,10 @@ bool StartROM(char* path, char* dir)
 	spcthread = threadCreate(SPCThread, 0x0, SPC_THREAD_STACK_SIZE, 0x18, 1, true);
 	if (!spcthread) 
 	{
-		bprintf("Failed to create SPC700 thread:\n");
+	//	// bprintf("Failed to create SPC700 thread:\n");
 	}
 	
-	bprintf("ROM loaded, running...\n");
+//	// bprintf("ROM loaded, running...\n");
 	
 	return true;
 }
@@ -790,15 +790,15 @@ void reportshit(u32 pc, u32 a, u32 y)
 	/*if (*(u32*)&SNES_SysRAM[0x300] != 0xEFEFEFEF && oldshiz==0xEFEFEFEF)
 	{
 		if (reported) return; reported=1;
-		bprintf("%06X A=%04X %04X\n", pc, a, *(u32*)&SNES_SysRAM[0x300]);
+		// bprintf("%06X A=%04X %04X\n", pc, a, *(u32*)&SNES_SysRAM[0x300]);
 	}
 	oldshiz = *(u32*)&SNES_SysRAM[0x300];*/
-	//bprintf("!! IRQ %04X %02X\n", SNES_Status->IRQ_CurHMatch, SNES_Status->IRQCond);
+	//// bprintf("!! IRQ %04X %02X\n", SNES_Status->IRQ_CurHMatch, SNES_Status->IRQCond);
 	//pause=1;
-	//bprintf("TSX S=%04X X=%04X P=%04X  %04X\n", pc>>16, a, y&0xFFFF, y>>16);
+	//// bprintf("TSX S=%04X X=%04X P=%04X  %04X\n", pc>>16, a, y&0xFFFF, y>>16);
 	if (reported) return;
-	//bprintf("!! %08X -> %08X | %08X\n", pc, a, y);
-	bprintf("!! A=%02X X=%02X Y=%02X\n", pc, a, y);
+	//// bprintf("!! %08X -> %08X | %08X\n", pc, a, y);
+	// bprintf("!! A=%02X X=%02X Y=%02X\n", pc, a, y);
 	reported=1;
 	//running=0; pause=1;
 }
@@ -806,15 +806,15 @@ void reportshit(u32 pc, u32 a, u32 y)
 int reported2=0;
 void reportshit2(u32 pc, u32 a, u32 y)
 {
-	//bprintf("TSC S=%04X A=%04X P=%04X  %04X\n", pc>>16, a, y&0xFFFF, y>>16);
+	//// bprintf("TSC S=%04X A=%04X P=%04X  %04X\n", pc>>16, a, y&0xFFFF, y>>16);
 	if (SNES_SysRAM[0x3C8] == 0 && reported2 != 0)
-		bprintf("[%06X] 3C8=0\n", debugpc);
+		// bprintf("[%06X] 3C8=0\n", debugpc);
 	reported2 = SNES_SysRAM[0x3C8];
 }
 
 void derpreport()
 {
-	bprintf("passed NMI check\n");
+	// bprintf("passed NMI check\n");
 }
 
 static aptHookCookie apt_hook_sleepsuspend;
@@ -863,7 +863,11 @@ int main()
 	aptCloseSession();
 
 	gfxInitDefault();
-	
+    romfsInit();
+    
+    char folderPath[] = "/snes";
+    mkdir(folderPath, 0777);
+
 	Config.HardwareMode7Filter = -1;
 	LoadConfig(1);
 	
@@ -949,8 +953,14 @@ int main()
 	
 	AudioEnabled = Audio_Init();
 	svcCreateEvent(&SPCSync, 0); 
-	
-	UI_Switch(&UI_ROMMenu);
+
+    UI_Switch(&UI_Console);
+
+    char romPath[] = "romfs:/";
+    char romFile[] = "rom.smc";
+    if (!StartROM(romFile, romPath)) forceexit = 1;
+
+//	UI_Switch(&UI_ROMMenu);
 	
 	// Create a hook for when the system either goes into sleep mode or is suspended, so it'll do things.
 	aptHook(&apt_hook_sleepsuspend, apt_sleepsuspend_hook, &running);
@@ -977,7 +987,7 @@ int main()
 				
 			/*{
 				extern u32 dbgcycles, nruns;
-				bprintf("SPC: %d / 17066  %08X\n", dbgcycles, SNES_Status->SPC_CycleRatio);
+				// bprintf("SPC: %d / 17066  %08X\n", dbgcycles, SNES_Status->SPC_CycleRatio);
 				dbgcycles = 0; nruns=0;
 			}*/
 			/*if (press & KEY_X) SNES_Status->SPC_CycleRatio+=0x1000;
@@ -993,9 +1003,9 @@ int main()
 			if (release & KEY_TOUCH) 
 			{
 				SNES_SaveSRAM();
-				bprintf("Pause.\n");
+				bprintf("Paused.\n");
 				bprintf("Tap screen or press A to resume.\n");
-				bprintf("Press Select to load another game.\n");
+				bprintf("Press L and R to take a screenshot.\n");
 				bprintf("Press Start to enter the config.\n");
 				pause = 1;
 				svcSignalEvent(SPCSync);
@@ -1011,10 +1021,11 @@ int main()
 			{
 				if (release & (KEY_TOUCH|KEY_A))
 				{
-					bprintf("Resume.\n");
+				//	// bprintf("Resume.\n");
+                    ClearConsole();
 					pause = 0;
 				}
-				else if (release & KEY_SELECT)
+/*				else if (release & KEY_SELECT)
 				{
 					running = 0;
 					UI_Switch(&UI_ROMMenu);
@@ -1032,14 +1043,14 @@ int main()
 
 					SafeWait(gspEvents[GSPGPU_EVENT_PPF]);
 					linearFree(tempbuf);
-				}
+				}*/
 				else if (release & KEY_START)
 				{
 					UI_SaveAndSwitch(&UI_Config);
 				}
 				else if (release & KEY_X)
 				{
-					bprintf("PC: CPU %02X:%04X  SPC %04X\n", CPU_Regs.PBR, CPU_Regs.PC, SPC_Regs.PC);
+				//	// bprintf("PC: CPU %02X:%04X  SPC %04X\n", CPU_Regs.PBR, CPU_Regs.PC, SPC_Regs.PC);
 					dbg_save("/snesram.bin", SNES_SysRAM, 128*1024);
 					dbg_save("/spcram.bin", SPC_RAM, 64*1024);
 					dbg_save("/vram.bin", PPU.VRAM, 64*1024);
@@ -1056,11 +1067,11 @@ int main()
 						snprintf(file, 256, "/blargSnes%08d.bmp", timestamp);
 						if (TakeScreenshot(file))
 						{
-							bprintf("Screenshot saved as:\n");
-							bprintf("SD:%s\n", file);
+						//	// bprintf("Screenshot saved as:\n");
+						//	// bprintf("SD:%s\n", file);
 						}
 						else
-							bprintf("Error saving screenshot\n");
+                            bprintf("Error saving screenshot\n");
 								
 						shot = 1;
 					}
@@ -1148,6 +1159,7 @@ int main()
 
 	bglDeInit();
 
+    romfsExit();
 	gfxExit();
 
     return 0;
