@@ -100,7 +100,7 @@ void ROM_SpeedChanged();
 
 void SNES_Init();
 
-bool SNES_LoadROM(char* path);
+bool SNES_LoadROM();
 void SNES_Reset();
 
 void SNES_SaveSRAM();

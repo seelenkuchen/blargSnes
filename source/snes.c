@@ -98,8 +98,9 @@ void SNES_Init()
 }
 
 
-bool SNES_LoadROM(char* path)
+bool SNES_LoadROM()
 {
+    char path[] = "romfs:/rom.smc";
 	if (!ROM_LoadFile(path))
 		return false;
 		

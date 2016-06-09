@@ -113,11 +113,11 @@ void Console_Render(bool force)
 
 void Console_ButtonPress(u32 btn)
 {
-	if (btn & (KEY_A|KEY_B))
+/*	if (btn & (KEY_A|KEY_B))
 	{
 		if (!running)
 			UI_Switch(&UI_ROMMenu);
-	}
+	}*/
 }
 
 void Console_Touch(int touch, u32 x, u32 y)

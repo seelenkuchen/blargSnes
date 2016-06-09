@@ -44,7 +44,7 @@ void UI_SaveAndSwitch(UIController* ui)
 {
 	if (UIStackPointer >= UISTACK_SIZE)
 	{
-		bprintf("!! UI STACK FULL\n");
+		// bprintf("!! UI STACK FULL\n");
 		return;
 	}
 	
@@ -59,7 +59,7 @@ void UI_Restore()
 {
 	if (UIStackPointer < 1)
 	{
-		bprintf("!! UI STACK EMPTY\n");
+		// bprintf("!! UI STACK EMPTY\n");
 		return;
 	}
 	

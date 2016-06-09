@@ -720,12 +720,8 @@ bool LoadBorder(char* path)
 }
 
 
-bool StartROM(char* path, char* dir)
+bool StartROM()
 {
-	
-	char temppath[0x210];
-	Result res;
-	
 	if (spcthread)
 	{
 		exitspc = 1; pause = 1;
@@ -746,15 +742,10 @@ bool StartROM(char* path, char* dir)
 	if(!AudioEnabled)
         bprintf("NDSP cannot initialize\n");
 	
-	// load the ROM
-	strcpy(temppath, dir);
-	strcpy(&temppath[strlen(dir)], path);
-	temppath[strlen(dir)+strlen(path)] = '\0';
 //	// bprintf("Loading %s...\n", path);
 	
 
-
-	if (!SNES_LoadROM(temppath))
+	if (!SNES_LoadROM())
 		return false;
 
 	SaveConfig(1);
@@ -773,7 +764,7 @@ bool StartROM(char* path, char* dir)
 	spcthread = threadCreate(SPCThread, 0x0, SPC_THREAD_STACK_SIZE, 0x18, 1, true);
 	if (!spcthread) 
 	{
-	//	// bprintf("Failed to create SPC700 thread:\n");
+        bprintf("Failed to create SPC700 thread:\n");
 	}
 	
 //	// bprintf("ROM loaded, running...\n");
@@ -808,7 +799,7 @@ void reportshit2(u32 pc, u32 a, u32 y)
 {
 	//// bprintf("TSC S=%04X A=%04X P=%04X  %04X\n", pc>>16, a, y&0xFFFF, y>>16);
 	if (SNES_SysRAM[0x3C8] == 0 && reported2 != 0)
-		// bprintf("[%06X] 3C8=0\n", debugpc);
+		bprintf("[%06X] 3C8=0\n", debugpc);
 	reported2 = SNES_SysRAM[0x3C8];
 }
 
@@ -956,9 +947,7 @@ int main()
 
     UI_Switch(&UI_Console);
 
-    char romPath[] = "romfs:/";
-    char romFile[] = "rom.smc";
-    if (!StartROM(romFile, romPath)) forceexit = 1;
+    if (!StartROM()) forceexit = 1;
 
 //	UI_Switch(&UI_ROMMenu);
 	
@@ -1005,11 +994,10 @@ int main()
 				SNES_SaveSRAM();
 				bprintf("Paused.\n");
 				bprintf("Tap screen or press A to resume.\n");
-				bprintf("Press L and R to take a screenshot.\n");
+				//bprintf("Press Select to reset.\n");
 				bprintf("Press Start to enter the config.\n");
 				pause = 1;
 				svcSignalEvent(SPCSync);
-					
 			}
 		}
 		else
@@ -1026,8 +1014,7 @@ int main()
 					pause = 0;
 				}
 /*				else if (release & KEY_SELECT)
-				{
-					running = 0;
+				{/*
 					UI_Switch(&UI_ROMMenu);
 						
 					// copy splashscreen
@@ -1043,6 +1030,9 @@ int main()
 
 					SafeWait(gspEvents[GSPGPU_EVENT_PPF]);
 					linearFree(tempbuf);
+                    running = 0;
+                    //FinishRendering();
+                    if (!StartROM()) forceexit = 1;
 				}*/
 				else if (release & KEY_START)
 				{
