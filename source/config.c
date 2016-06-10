@@ -27,17 +27,20 @@
 
 Config_t Config;
 
-const char* configFilePath = "/blargSnes.ini";
+const char* configFilePath = "romfs:/blargSnes.ini";
+const char* altConfigFilePath = "/blargSnes.ini";
 
 const char* configFileL = 
 	"HardwareRenderer=%d\n"
 	"ScaleMode=%d\n"
-	"DirPath=%[^\t\n]\n";
+	"DirPath=%[^\t\n]\n"
+    "Mode7=%d\n";
 
 const char* configFileS = 
 	"HardwareRenderer=%d\n"
 	"ScaleMode=%d\n"
-	"DirPath=%s\n";
+	"DirPath=%s\n"
+    "Mode7=%d\n";
 
 char * lastDir[0x106];
 
@@ -47,14 +50,19 @@ void LoadConfig(u8 init)
 	char tempDir[0x106];
 	Config.HardwareRenderer = 1;
 	Config.ScaleMode = 0;
+    Config.HardwareMode7Filter = 0;
 	if(init) {
 		strncpy(Config.DirPath,"/\0",2);
 		strncpy(lastDir,"/\0",2);
 	}
 
 	FILE *pFile = fopen(configFilePath, "rb");
+    
 	if(pFile == NULL)
-		return;
+		pFile = fopen(altConfigFilePath, "rb");
+    
+    if(pFile == NULL)
+        return;
 
 	fseek(pFile, 0, SEEK_END);
 	u32 size = ftell(pFile);
@@ -72,7 +80,8 @@ void LoadConfig(u8 init)
 	sscanf(tempbuf, configFileL, 
 		&Config.HardwareRenderer,
 		&Config.ScaleMode,
-		tempDir);
+		tempDir,
+        &Config.HardwareMode7Filter);
 
 	if(Config.HardwareMode7Filter == -1)
 		Config.HardwareMode7Filter = 0;
@@ -101,7 +110,7 @@ void SaveConfig(u8 saveCurDir)
 	else
 		strncpy(tempDir,Config.DirPath,0x106);
 
-	FILE *pFile = fopen(configFilePath, "wb");
+	FILE *pFile = fopen(altConfigFilePath, "wb");
 	if(pFile == NULL)
 	{
 		// bprintf("Error while saving config\n");
@@ -113,7 +122,8 @@ void SaveConfig(u8 saveCurDir)
 	u32 size = snprintf(tempbuf, 1024, configFileS, 
 		Config.HardwareRenderer,
 		Config.ScaleMode,
-		tempDir);
+		tempDir,
+        Config.HardwareMode7Filter);
 	
 	fwrite(tempbuf, sizeof(char), size, pFile);
 	fclose(pFile);

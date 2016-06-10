@@ -100,8 +100,9 @@ void SNES_Init()
 
 bool SNES_LoadROM()
 {
-    char path[] = "romfs:/rom.smc";
-	if (!ROM_LoadFile(path))
+    const char* romFilePath = "romfs:/rom.smc";
+    
+	if (!ROM_LoadFile(romFilePath))
 		return false;
 		
 	ROM_Bank0 = ROM_Buffer;

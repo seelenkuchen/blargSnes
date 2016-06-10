@@ -101,6 +101,7 @@ u16* SubScreenTex;
 int forceexit = 0;
 int running = 0;
 int pause = 0;
+int reset = 0;
 u32 framecount = 0;
 
 u8 RenderState = 0;
@@ -703,8 +704,9 @@ bool LoadBitmap(char* path, u32 width, u32 height, void* dst, u32 alpha, u32 sta
 
 	
 	u32 bufsize = width*height*3;
-	u8* buf = (u8*)linearAlloc(bufsize);
+	u8* buf = (u8*)linearMemAlign(bufsize, 0x10);
 	
+    fseek(pFile, 0x36, SEEK_SET);
 	fread(buf, sizeof(char), bufsize, pFile);
 	fclose(pFile);
 
@@ -733,6 +735,7 @@ bool StartROM()
 	
 	running = 1;
 	pause = 0;
+    reset = 0;
 	framecount = 0;
 	
 	ClearConsole();
@@ -740,7 +743,7 @@ bool StartROM()
 //	// bprintf("http://blargsnes.kuribo64.net/\n");
 
 	if(!AudioEnabled)
-        bprintf("NDSP cannot initialize\n");
+        bprintf("NDSP cannot initialize.\n");
 	
 //	// bprintf("Loading %s...\n", path);
 	
@@ -842,6 +845,7 @@ int main()
 	forceexit = 0;
 	running = 0;
 	pause = 0;
+    reset = 0;
 	exitspc = 0;
 	
 	ClearConsole();
@@ -928,7 +932,7 @@ int main()
 	
 	
 	// load border
-	if (!LoadBorder("/blargSnesBorder.bmp"))
+	if ((!LoadBorder("romfs:/blargSnesBorder.bmp")) && (!LoadBorder("/blargSnesBorder.bmp")))
 		CopyBitmapToTexture(defaultborder, BorderTex, 400, 240, 0xFF, 0, 64, 0x1);
 
 	// copy splashscreen
@@ -960,6 +964,11 @@ int main()
 		u32 press = hidKeysDown();
 		u32 held = hidKeysHeld();
 		u32 release = hidKeysUp();
+        
+        if (reset)
+        {
+            if (!StartROM()) forceexit = 1;
+        }
 			
 		if (running && !pause)
 		{
@@ -994,7 +1003,7 @@ int main()
 				SNES_SaveSRAM();
 				bprintf("Paused.\n");
 				bprintf("Tap screen or press A to resume.\n");
-				//bprintf("Press Select to reset.\n");
+				bprintf("Press Select to reset.\n");
 				bprintf("Press Start to enter the config.\n");
 				pause = 1;
 				svcSignalEvent(SPCSync);
@@ -1013,10 +1022,12 @@ int main()
                     ClearConsole();
 					pause = 0;
 				}
-/*				else if (release & KEY_SELECT)
-				{/*
-					UI_Switch(&UI_ROMMenu);
-						
+				else if (release & KEY_SELECT)
+				{
+                    running = 0;
+                    pause = 0;
+                    reset = 1;
+					/*	
 					// copy splashscreen
 					FinishRendering();
 					SNES_Status->ScreenHeight = 224;
@@ -1030,10 +1041,8 @@ int main()
 
 					SafeWait(gspEvents[GSPGPU_EVENT_PPF]);
 					linearFree(tempbuf);
-                    running = 0;
-                    //FinishRendering();
-                    if (!StartROM()) forceexit = 1;
-				}*/
+                    */
+				}
 				else if (release & KEY_START)
 				{
 					UI_SaveAndSwitch(&UI_Config);
