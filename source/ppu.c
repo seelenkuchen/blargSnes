@@ -937,7 +937,7 @@ void PPU_Write16(u32 addr, u16 val)
 		case 0x42: SPC_Compensate(); *(u16*)&SPC_IOPorts[2] = val; break;
 		
 		case 0x3F:
-		case 0x43: // bprintf("!! write $21%02X %04X\n", addr, val); break;
+		case 0x43: break; // bprintf("!! write $21%02X %04X\n", addr, val); break;
 		
 		case 0x81: Mem_WRAMAddr = (Mem_WRAMAddr & 0x00010000) | val; break;
 		
