@@ -134,14 +134,14 @@ bool SNES_LoadROM()
 	if (SNES_SRAMMask)
 	{
         int useid = 0;
-        char fPath[] = "romfs:/rom.txt";
-        FILE *sFile = fopen(fPath, "r");
+		const char* infoFilePath = "romfs:/rom.txt";
+        FILE *sFile = fopen(infoFilePath, "r");
         if(sFile == NULL)
             useid = 1;
 
         char tempbuf[256];
-        char sPath[] = "/snes/";
-        char sExt[] = ".srm";
+        const char* sPath = "/snes/";
+        const char* sExt = ".srm";
 
         if (useid)
         {

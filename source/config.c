@@ -29,6 +29,7 @@ Config_t Config;
 
 const char* configFilePath = "romfs:/blargSnes.ini";
 const char* altConfigFilePath = "/blargSnes.ini";
+char saveConfigFilePath[300];
 
 const char* configFileL = 
 	"HardwareRenderer=%d\n"
@@ -47,6 +48,31 @@ char * lastDir[0x106];
 
 void LoadConfig(u8 init)
 {
+    int useid = 0;
+    const char* infoFilePath = "romfs:/rom.txt";
+    FILE *cFile = fopen(infoFilePath, "r");
+    if(cFile == NULL) useid = 1;
+
+    char tempstr[256];
+    const char* cPath = "/snes/";
+    const char* cExt = ".ini";
+
+    if (useid)
+    {
+        u64 ID;
+        aptOpenSession();
+        APT_GetProgramID(&ID);
+        aptCloseSession();
+        sprintf(tempstr, "%lx", ID);
+    }
+    else fgets(tempstr, sizeof(tempstr), cFile);
+
+    strncpy(saveConfigFilePath, cPath, 6);
+    strncpy(saveConfigFilePath + 6, tempstr, strlen(tempstr));
+    strncpy(saveConfigFilePath + strlen(tempstr) + 4, cExt, 4);
+
+    fclose(cFile);
+
 	char tempDir[0x106];
 	Config.HardwareRenderer = 1;
 	Config.ScaleMode = 0;
@@ -56,11 +82,14 @@ void LoadConfig(u8 init)
 		strncpy(lastDir,"/\0",2);
 	}
 
-	FILE *pFile = fopen(configFilePath, "rb");
+	FILE *pFile = fopen(saveConfigFilePath, "rb");
     
 	if(pFile == NULL)
-		pFile = fopen(altConfigFilePath, "rb");
+		pFile = fopen(configFilePath, "rb");
     
+    if(pFile == NULL)
+        pFile = fopen(altConfigFilePath, "rb");
+
     if(pFile == NULL)
         return;
 
@@ -104,19 +133,43 @@ void LoadConfig(u8 init)
 
 void SaveConfig(u8 saveCurDir)
 {
+    int useid = 0;
+    const char* infoFilePath = "romfs:/rom.txt";
+    FILE *cFile = fopen(infoFilePath, "r");
+    if(cFile == NULL) useid = 1;
+
+    char tempstr[256];
+    const char* cPath = "/snes/";
+    const char* cExt = ".ini";
+
+    if (useid)
+    {
+        u64 ID;
+        aptOpenSession();
+        APT_GetProgramID(&ID);
+        aptCloseSession();
+        sprintf(tempstr, "%lx", ID);
+    }
+    else fgets(tempstr, sizeof(tempstr), cFile);
+
+    strncpy(saveConfigFilePath, cPath, 6);
+    strncpy(saveConfigFilePath + 6, tempstr, strlen(tempstr));
+    strncpy(saveConfigFilePath + strlen(tempstr) + 4, cExt, 4);
+
+    fclose(cFile);
+    
 	char tempDir[0x106];
 	if(!saveCurDir)
 		strncpy(tempDir,lastDir,0x106);
 	else
 		strncpy(tempDir,Config.DirPath,0x106);
 
-	FILE *pFile = fopen(altConfigFilePath, "wb");
+	FILE *pFile = fopen(saveConfigFilePath, "wb");
 	if(pFile == NULL)
 	{
 		// bprintf("Error while saving config\n");
 		return;
 	}
-
 	
 	char* tempbuf = (char*)linearAlloc(1024);
 	u32 size = snprintf(tempbuf, 1024, configFileS, 
