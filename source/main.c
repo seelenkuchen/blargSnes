@@ -48,6 +48,9 @@
 #include "plain_quad_shbin.h"
 #include "window_mask_shbin.h"
 
+#include "saves.h"
+
+
 #include "version.h"
 
 u64 emuTick;
@@ -1001,10 +1004,13 @@ int main()
 			if (release & KEY_TOUCH) 
 			{
 				SNES_SaveSRAM();
+				ClearConsole();
 				bprintf("Paused.\n");
 				bprintf("Tap screen or press A to resume.\n");
 				bprintf("Press Select to reset.\n");
 				bprintf("Press Start to enter the config.\n");
+				bprintf("Press X to save game.\n");
+				bprintf("Press Y to restore saved game.\n");
 				pause = 1;
 				svcSignalEvent(SPCSync);
 			}
@@ -1024,6 +1030,7 @@ int main()
 				}
 				else if (release & KEY_SELECT)
 				{
+					
                     running = 0;
                     pause = 0;
                     reset = 1;
@@ -1047,14 +1054,30 @@ int main()
 				{
 					UI_SaveAndSwitch(&UI_Config);
 				}
+				//added some saving here
 				else if (release & KEY_X)
 				{
+					/*
 				//	// bprintf("PC: CPU %02X:%04X  SPC %04X\n", CPU_Regs.PBR, CPU_Regs.PC, SPC_Regs.PC);
 					dbg_save("/snesram.bin", SNES_SysRAM, 128*1024);
 					dbg_save("/spcram.bin", SPC_RAM, 64*1024);
 					dbg_save("/vram.bin", PPU.VRAM, 64*1024);
 					dbg_save("/oam.bin", PPU.OAM, 0x220);
 					dbg_save("/cgram.bin", PPU.CGRAM, 512);
+					*/
+					saveGame();
+					ClearConsole();
+					bprintf("Game saved.\n");
+					bprintf("Tap Screen or press A to continue.\n");
+				}
+				//added some loading here
+				else if(release & KEY_Y){
+					
+					retrieveSavegame();
+					ClearConsole();
+					bprintf("Game restored.\n");
+					bprintf("Tap Screen or press A to continue.\n");
+					
 				}
 					
 				if ((held & (KEY_L|KEY_R)) == (KEY_L|KEY_R))
