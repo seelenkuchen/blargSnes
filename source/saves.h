@@ -25,6 +25,7 @@
 #include "spc700.h"
 #include "ppu.h"
 #include "snes.h"
+
 //#include "dsp.h"
 
 //Still figuring out which values are needed, saving the whole PPU is probably overkill
@@ -33,13 +34,25 @@
 	u8 SysRam[0x20000];
 	u8 SpcRam[0x10040];
 	u8 DSP_MEM_Back[0x100];
-	
+    u8 SPC_ROM_Back[0x40];
+    u8 SPC_IOPorts_back[8];
+
+    //u8 SPC_IOUnread_back[4];
+    u8 SNES_JoyBit_back;
+    u8 SNES_AutoJoypad_back;
+    u32 SNES_JoyBuffer_back;
+    u8 SNES_Joy16_back;
+
+    SNES_StatusData Status_Temp;
 	CPU_Regs_t CPU_Reg_Temp;
 	SPC_Regs_t SPC_Reg_Temp;
 	PPUState PPU_Temp;
 	
 } SaveState;
 
-void saveGame();
-void retrieveSavegame();
+
+char* generateFilepath();
+bool saveGame();
+bool retrieveSavegame();
+
 #endif
